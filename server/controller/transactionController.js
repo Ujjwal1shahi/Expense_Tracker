@@ -35,6 +35,15 @@ export const getTransaction = async (req, res) => {
 export const getDashboardInformation = async (req, res) => {
     try {
         
+        const { userId } = req.body.user;
+
+        const totalIncome = 0;
+        const totalExpense = 0;
+
+        const transactionResult = await pool.query({
+            
+        })
+
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -101,6 +110,11 @@ export const addTransaction = async (req, res) => {
 
         await pool.query("Commit");
 
+        res.status(200).json({
+            success: "success",
+            message: "Transaction completed successfully.",
+        })
+
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -113,6 +127,76 @@ export const addTransaction = async (req, res) => {
 export const transferMoneyToAccount = async (req, res) => {
     try {
         
+        const { userId } = req.body.user;
+        const { from_account, to_account, amount } = req.body;
+        
+        if(!(from_account || to_account || amount)){
+            return res.status(403).json({
+                status: "failed",
+                message: "Provide Required Fields!",
+            });
+        }
+
+        const newAmount = Number(amount);
+
+        if(newAmount <= 0){
+            return res.status(403).json({
+                status: "failed",
+                message: "Amount should be greater than 0.",
+            });
+        }
+
+        const fromAccountResult = await pool.query({
+            text: `SELECT * FROM tblaccount WHERE id = $1`,
+            values: [from_account],
+        });
+
+        const fromAccount = fromAccountResult.rows[0];
+
+        if(!fromAccount){
+            return res.status(404).json({
+                status: "failed",
+                message: "Account information not found.",
+            });
+        }
+
+        if(newAmount > fromAccount.account_balance){
+            return res.status(403).json({
+                status: "failed",
+                message: "Transfer failed. Insufficient account balance.",
+            });
+        }
+
+        await pool.query("BEGIN");
+
+        await pool.query({
+            text: `UPDATE tblaccount SET account_balance = account_balance - $1, updatedat = CURRENT_TIMESTAMP WHERE id = $2`,
+            values: [newAmount, from_account],
+        });
+
+        const toAccount = await pool.query({
+            text: `UPDATE tblaccount SET account_balance = $1, updatedat = CURRENT_TIMESTAMP WHERE id = $2 RETURNING *`,
+            values: [newAmount, to_account],
+        });
+
+        const description = `Transfer (${fromAccount.account_name} - ${toAccount.rows[0].account_name})`;
+
+        await pool.query({
+            text: `INSERT INTO tbltransaction(user_id, description, type, status, amount, source) VALUES($1, $2, $3, $4, $5, $6)`,
+            values: [userId, description, "expense", "completed", amount, fromAccount.account_name],
+        });
+
+        const description1 = `Received (${fromAccount.account_name} - ${toAccount.rows[0].account_name})`;
+        
+        await pool.query({
+            text: `INSERT INTO tbltransaction(user_id, description, type, status, amount, source) VALUES($1, $2, $3, $4, $5, $6)`,
+            values: [userId, description1, "income", "Completed", amount, toAccount.rows[0].account_name],
+        });
+
+        await pool.query("COMMIT");
+
+
+
     } catch (error) {
         console.log(error);
         res.status(500).json({
