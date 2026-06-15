@@ -1,3 +1,4 @@
+import { getMonthName } from "../libs/index.js";
 import { pool } from "../libs/database";
 
 export const getTransaction = async (req, res) => {
@@ -8,7 +9,7 @@ export const getTransaction = async (req, res) => {
 
     const sevenDaysAgo = _sevenDaysAgo.toISOString().split("T")[0];
     const { df, dt, s } = req.query;
-    const { userId } = req.body.userId;
+    const { userId } = req.body.user;
     const startDate = new Date(df || sevenDaysAgo);
     const endDate = new Date(dt || new Date());
 
@@ -34,8 +35,8 @@ export const getDashboardInformation = async (req, res) => {
   try {
     const { userId } = req.body.user;
 
-    const totalIncome = 0;
-    const totalExpense = 0;
+    let totalIncome = 0;
+    let totalExpense = 0;
 
     const transactionResult = await pool.query({
       text: `SELECT type, SUM(amount) as totalAmount from tbltransaction WHERE user_id = $1 GROUP BY type`,
@@ -72,6 +73,48 @@ export const getDashboardInformation = async (req, res) => {
                 EXTRACT(MONTH FROM createdat), type`,
       values: [userId, start_Date, end_Date],
     });
+
+    const data = new Array(12).fill().map((_, index) => {
+      const monthData = result.rows.filter(
+        (item) => parseInt(item.month) === index + 1
+      );
+
+      const income = monthData.find((item) => item.type === 'income')?.totalamount || 0;
+      const expense = monthData.find((item) => item.type === 'expense')?.totalamount || 0;
+
+      return {
+        label: getMonthName(index),
+        income,
+        expense,
+      };
+    });
+
+    // Fetch last transaction
+    const lastTransactionsResult = await pool.query({
+      text: `SELECT * FROM tbltransaction WHERE user_id = $1 ORDER BY id DESC LIMIT 5`,
+      values: [userId],
+    });
+
+    const lastTransactions = lastTransactionsResult.rows;
+
+    // fetch last accounts
+    const lastAccountResult = await pool.query({
+      text: `SELECT * FROM tblaccount WHERE user_id = $1 ORDER BY id DESC LIMIT 4`,
+      values: [userId],
+    });
+
+    const lastAccount = lastAccountResult.rows;
+
+    res.status(200).json({
+      status: "Success",
+      availableBalance,
+      totalIncome,
+      totalExpense,
+      chartData: data,
+      lastTransactions,
+      lastAccount,
+    });
+
   } catch (error) {
     console.log(error);
     res.status(500).json({
