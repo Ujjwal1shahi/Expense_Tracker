@@ -546,26 +546,26 @@ export default function Landing() {
         backdropFilter: scrolled ? "blur(20px) saturate(1.4)" : "none",
         borderBottom: scrolled ? "1px solid rgba(255,255,255,0.05)" : "1px solid transparent",
       }}>
-        <div className="max-w-6xl mx-auto px-6 flex items-center justify-between" style={{ height: 64 }}>
+        <div className="max-w-8xl mx-auto px-6 flex items-center justify-between" style={{ height: 74 }}>
           {/* Logo */}
-          <a href="#" className="flex items-center gap-2.5 no-underline">
-            <div className="w-8 h-8 rounded-xl flex items-center justify-center pulse-dot" style={{ background: "linear-gradient(135deg,#10b981,#059669)" }}>
-              <svg viewBox="0 0 20 20" fill="white" className="w-4 h-4">
+          <a href="#" className="flex items-center gap-5 no-underline">
+            <div className="w-12 h-12 rounded-xl flex items-center justify-center pulse-dot" style={{ background: "linear-gradient(135deg,#10b981,#059669)" }}>
+              <svg viewBox="0 0 20 20" fill="white" className="w-8 h-8">
                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.077 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.077-2.354-1.253V5z" clipRule="evenodd" />
               </svg>
             </div>
-            <span className="display font-800 text-white text-lg tracking-tight">spendly</span>
+            <span className="display font-800 font-bold text-shadow-emerald-800 text-3xl tracking-tight">Spendly</span>
           </a>
  
           {/* Desktop links */}
-          <nav className="hidden md:flex items-center gap-7">
-            {["Features", "Pricing", "Blog", "Company"].map(l => <a key={l} href="#" className="nav-link">{l}</a>)}
+          <nav className="hidden md:flex items-center p-3  justify-center gap-18">
+            {["Features","About", "Pricing", "Blog", "Company"].map(l => <a key={l} href="#" className="nav-link">{l}</a>)}
           </nav>
  
           {/* Desktop CTAs */}
-          <div className="hidden md:flex items-center gap-3">
-            <button className="btn-ghost text-sm px-4 py-2 rounded-lg">Sign in</button>
-            <button className="btn-primary text-sm px-5 py-2.5 rounded-xl">Get started free</button>
+          <div className="hidden md:flex items-center gap-2">
+            <button className="btn-ghost text-lg px-4 py-2 rounded-lg">Sign in</button>
+            <button className="btn-primary text-xl px-5 py-2.5 rounded-xl">Get started free</button>
           </div>
  
           {/* Mobile hamburger */}
