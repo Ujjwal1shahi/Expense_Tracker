@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, useCallback } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
  
 /* ─────────────────────────────────────────────
    PARTICLE CANVAS  — subtle financial data feel
@@ -438,6 +439,7 @@ export default function Landing() {
   const [billing, setBilling] = useState("monthly");
   const [activeFeature, setActiveFeature] = useState(0);
   const [scrolled, setScrolled] = useState(false);
+  const navigate = useNavigate();
  
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -564,7 +566,7 @@ export default function Landing() {
  
           {/* Desktop CTAs */}
           <div className="hidden md:flex items-center gap-2">
-            <button className="btn-ghost text-lg px-4 py-2 rounded-lg">Sign in</button>
+            <button onClick={navigate("/sign-in")} className="btn-ghost text-lg px-4 py-2 rounded-lg">Sign in</button>
             <button className="btn-primary text-xl px-5 py-2.5 rounded-xl">Get started free</button>
           </div>
  
