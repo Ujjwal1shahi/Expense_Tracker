@@ -8,15 +8,17 @@ import Dashboard from "./pages/Dashboard";
 import Transaction from "./pages/Transaction";
 import Settings from "./pages/Settings";
 import AccountPage from "./pages/AccountPage";
+import useStore from "./store";
 
 const RootLayout = () => {
-  const user = null;
+  const user = useStore((state) => state);
+  console.log(user);
 
   return !user ? (
-    <Navigate to="sign-in" />
+    <Navigate to="sign-in" replace={true} />
   ) : (
     <>
-       <div>
+       <div className="min-h-[cal(h-screen-100px)]">
         <Outlet />
        </div>
     </>
@@ -26,7 +28,7 @@ const RootLayout = () => {
 const App = () => {
   return(
   <main>
-    <div>
+    <div className="">
       <Routes>
         <Route element={<RootLayout />}>
           <Route path="/" element={<Landing />} />
