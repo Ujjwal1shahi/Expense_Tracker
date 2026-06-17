@@ -1,3 +1,4 @@
+import Navbar from "../components/Navbar";
 import { useEffect, useRef, useState, useCallback } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
  
@@ -439,6 +440,7 @@ export default function Landing() {
   const [billing, setBilling] = useState("monthly");
   const [activeFeature, setActiveFeature] = useState(0);
   const [scrolled, setScrolled] = useState(false);
+
   const navigate = useNavigate();
  
   useEffect(() => {
@@ -543,49 +545,7 @@ export default function Landing() {
       <div className="fixed inset-0 dot-grid pointer-events-none" style={{ zIndex: 1, opacity: .5 }} />
  
       {/* ── NAV ── */}
-      <header className="fixed top-0 inset-x-0 z-50 transition-all duration-300" style={{
-        background: scrolled ? "rgba(7,12,20,0.88)" : "transparent",
-        backdropFilter: scrolled ? "blur(20px) saturate(1.4)" : "none",
-        borderBottom: scrolled ? "1px solid rgba(255,255,255,0.05)" : "1px solid transparent",
-      }}>
-        <div className="max-w-8xl mx-auto px-6 flex items-center justify-between" style={{ height: 74 }}>
-          {/* Logo */}
-          <a href="#" className="flex items-center gap-5 no-underline">
-            <div className="w-12 h-12 rounded-xl flex items-center justify-center pulse-dot" style={{ background: "linear-gradient(135deg,#10b981,#059669)" }}>
-              <svg viewBox="0 0 20 20" fill="white" className="w-8 h-8">
-                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.077 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.077-2.354-1.253V5z" clipRule="evenodd" />
-              </svg>
-            </div>
-            <span className="display font-800 font-bold text-shadow-emerald-800 text-3xl tracking-tight">Spendly</span>
-          </a>
- 
-          {/* Desktop links */}
-          <nav className="hidden md:flex items-center p-3  justify-center gap-18">
-            {["Features","About", "Pricing", "Blog", "Company"].map(l => <a key={l} href="#" className="nav-link">{l}</a>)}
-          </nav>
- 
-          {/* Desktop CTAs */}
-          <div className="hidden md:flex items-center gap-2">
-            <button onClick={navigate("/sign-in")} className="btn-ghost text-lg px-4 py-2 rounded-lg">Sign in</button>
-            <button className="btn-primary text-xl px-5 py-2.5 rounded-xl">Get started free</button>
-          </div>
- 
-          {/* Mobile hamburger */}
-          <button onClick={() => setMenuOpen(o => !o)} className="md:hidden text-white/50 hover:text-white transition-colors p-1">
-            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
-              <path strokeLinecap="round" strokeLinejoin="round" d={menuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"} />
-            </svg>
-          </button>
-        </div>
- 
-        {/* Mobile menu */}
-        <div className="md:hidden overflow-hidden transition-all duration-300" style={{ maxHeight: menuOpen ? 300 : 0 }}>
-          <div className="px-6 py-5 flex flex-col gap-4 border-t" style={{ background: "rgba(7,12,20,0.97)", borderColor: "rgba(255,255,255,0.06)" }}>
-            {["Features","Pricing","Blog","Company"].map(l => <a key={l} href="#" className="nav-link text-sm">{l}</a>)}
-            <button className="btn-primary text-sm px-5 py-2.5 rounded-xl w-fit mt-1">Get started free</button>
-          </div>
-        </div>
-      </header>
+      <Navbar />
  
       {/* ═══════════════════════════════════
           HERO
@@ -632,12 +592,6 @@ export default function Landing() {
         </div>
  
         {/* Main headline */}
-        <div style={{ animation: "fadeUp .7s ease both", animationDelay: ".05s" }}>
-          <Badge color="emerald">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse inline-block" style={{ boxShadow: "0 0 6px #10b981" }} />
-            AI-powered expense intelligence
-          </Badge>
-        </div>
  
         <h1 className="display font-900 leading-[1.04] mt-5 mb-5" style={{ fontSize: "clamp(2.6rem,5.8vw,5rem)", letterSpacing: "-.025em", animation: "fadeUp .7s ease both", animationDelay: ".15s" }}>
           Know exactly where<br />
@@ -647,12 +601,12 @@ export default function Landing() {
           </span>
         </h1>
  
-        <p className="text-lg max-w-xl mx-auto leading-relaxed mb-8" style={{ color: "rgba(255,255,255,0.45)", animation: "fadeUp .7s ease both", animationDelay: ".25s" }}>
+        <p className="text-lg max-w-xl mx-auto leading-relaxed mt-8 mb-8" style={{ color: "rgba(255,255,255,0.45)", animation: "fadeUp .7s ease both", animationDelay: ".25s" }}>
           Spendly connects to your bank, categorizes every transaction with AI, and gives you the clarity to make smarter financial decisions — automatically.
         </p>
  
-        <div className="flex flex-col sm:flex-row gap-3 justify-center mb-10" style={{ animation: "fadeUp .7s ease both", animationDelay: ".35s" }}>
-          <button className="btn-primary text-base px-9 py-3.5 rounded-xl">Start for free — no card needed</button>
+        <div className="flex flex-col sm:flex-row gap-3 justify-center mt-5 mb-10" style={{ animation: "fadeUp .7s ease both", animationDelay: ".35s" }}>
+          <button onClick={() => navigate("/sign-up")} className="btn-primary text-base px-9 py-3.5 rounded-xl">Start for free — no card needed</button>
           <button className="btn-ghost text-base px-7 py-3.5 rounded-xl flex items-center gap-2.5 justify-center">
             <svg viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4 text-emerald-400">
               <path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z" />
@@ -1000,7 +954,7 @@ export default function Landing() {
                 </p>
  
                 <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                  <button className="btn-primary text-base px-10 py-3.5 rounded-xl">Create free account</button>
+                  <button onClick={() => navigate("/sign-up")} className="btn-primary text-base px-10 py-3.5 rounded-xl">Create free account</button>
                   <button className="btn-ghost text-base px-8 py-3.5 rounded-xl">Explore all features</button>
                 </div>
  
