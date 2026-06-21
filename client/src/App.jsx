@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Navigate, Outlet, Route, Routes } from "react-router-dom";
 
 import Landing from "./pages/Landing";
@@ -9,10 +9,12 @@ import Transaction from "./pages/Transaction";
 import Settings from "./pages/Settings";
 import AccountPage from "./pages/AccountPage";
 import useStore from "./store";
+import { setAuthToken } from "./libs/apiCall.js"
+import { Toaster } from "sonner";
 
 const RootLayout = () => {
   const user = useStore((state) => state);
-  console.log(user);
+  setAuthToken(user?.token || "");
 
   return !user ? (
     <Navigate to="sign-in" replace={true} />
@@ -26,6 +28,8 @@ const RootLayout = () => {
 };
 
 const App = () => {
+  const [count, setCount] = useState(0);
+
   return(
   <main>
     <div className="">
@@ -41,6 +45,8 @@ const App = () => {
         <Route path="/sign-up" element={<Signup />} />
       </Routes>
     </div>
+
+    <Toaster className="bg-white/20 backdrop-blur-2xl" position="top-center" />
   </main>
   );
 };
